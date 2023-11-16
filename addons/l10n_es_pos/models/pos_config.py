@@ -4,24 +4,30 @@ from odoo import api, fields, models
 class PosConfig(models.Model):
     _inherit = "pos.config"
 
-    is_spanish = fields.Boolean(string="Company located in Spain", compute="_is_company_spanish")
-
-    def _is_company_spanish(self):
-        for pos in self:
-            pos.is_spanish = pos.company_id.country_id.code == "ES"
-
+    is_spanish = fields.Boolean(string="Company located in Spain", compute="_compute_is_spanish")
     l10n_es_simplified_invoice_limit = fields.Float(
         string="Simplified Invoice limit amount",
         help="Over this amount is not legally possible to create a simplified invoice",
         default=400,
     )
-    l10n_es_simplified_invoice_journal_id = fields.Many2one('account.journal')
+    l10n_es_simplified_invoice_journal_id = fields.Many2one(
+        comodel_name='account.journal',
+        domain="[('type', '=', 'sale')]",
+        check_company=True,
+        help="Only if this journal is set, simplified invoices will be created for every not already invoiced PoS order.",
+    )
     simplified_partner_id = fields.Many2one(
-        "res.partner", string="Simplified invoice partner", compute="_get_simplified_partner"
+        comodel_name="res.partner",
+        string="Simplified invoice partner",
+        compute="_compute_simplified_partner_id",
     )
 
     @api.depends("company_id")
-    def _get_simplified_partner(self):
+    def _compute_is_spanish(self):
+        for pos in self:
+            pos.is_spanish = pos.company_id.country_code == "ES"
+
+    def _compute_simplified_partner_id(self):
         for config in self:
             config.simplified_partner_id = self.env.ref("l10n_es.partner_simplified").id
 

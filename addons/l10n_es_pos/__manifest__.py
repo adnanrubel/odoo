@@ -5,6 +5,9 @@
     'countries': ['es'],
     'category': 'Accounting/Localizations/Point of Sale',
     'summary': """Spanish localization for Point of Sale""",
+    'description': """
+Activate Simplified Invoice generation by providing a dedicated Journal in the Point of Sale settings.
+    """,
     'depends': ['point_of_sale', 'l10n_es'],
     'auto_install': True,
     'license': 'LGPL-3',
