@@ -260,9 +260,15 @@ function webViewerLoad() {
   const maxTouchPoints = (typeof navigator !== 'undefined' && navigator.maxTouchPoints) || 1;
   const isAndroid = /Android/.test(userAgent);
   const isIOS = /\b(iPad|iPhone|iPod)(?=;)/.test(userAgent) || (platform === 'MacIntel' && maxTouchPoints > 1);
-  // Hide Open Button
+  // Hide Open Button all platform
   config.toolbar.openFile.setAttribute('hidden', 'true');
   config.secondaryToolbar.openFileButton.setAttribute('hidden', 'true');
+  // Hide Download Button all platform
+  config.toolbar.download.setAttribute('hidden', 'true');
+  config.secondaryToolbar.downloadButton.setAttribute('hidden', 'true');
+  // Hide Print Button all platform
+  config.toolbar.print.setAttribute('hidden', 'true');
+  config.secondaryToolbar.printButton.setAttribute('hidden', 'true');   
   if (isAndroid || isIOS) {
     // Hide Download Button
     config.toolbar.download.setAttribute('hidden', 'true');
